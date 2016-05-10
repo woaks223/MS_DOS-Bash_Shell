@@ -1,7 +1,8 @@
 ﻿  main.c
-c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(29): warning C4013: 'getcwd'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(29): warning C4047: '=': 'char *'의 간접 참조 수준이 'int'과(와) 다릅니다.
-c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(72): warning C4047: '=': 'char *'의 간접 참조 수준이 'int'과(와) 다릅니다.
-c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(79): warning C4013: 'chdir'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(78): warning C4047: '초기화 중': 'char'의 간접 참조 수준이 'char *'과(와) 다릅니다.
-  ls.vcxproj -> c:\users\jaemahn\documents\visual studio 2015\Projects\ls\Debug\ls.exe
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(32): warning C4013: 'getcwd'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(32): warning C4047: '=': 'char *'의 간접 참조 수준이 'int'과(와) 다릅니다.
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(91): warning C4047: '=': 'char *'의 간접 참조 수준이 'int'과(와) 다릅니다.
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(103): warning C4013: 'chdir'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(97): warning C4101: 'chang' :참조되지 않은 지역 변수입니다.
+c:\users\jaemahn\documents\visual studio 2015\projects\ls\main.c(150): warning C4716: 'isFileOrDir': 값을 반환해야 합니다.
+  ls.vcxproj -> C:\Users\JaeMahn\documents\visual studio 2015\Projects\ls\Debug\ls.exe
