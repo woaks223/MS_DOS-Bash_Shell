@@ -14,13 +14,13 @@ void cls();
 void cd_command_cut(char command[100]);
 char *replaceAll(char *s, const char *olds, const char *news);
 int isFileOrDir(char* s);
-
+char temp[400][512];
 char strBuffer[_MAX_PATH] = { 0 };
 char *pstrBuffer = NULL;
-
+int wav_file_cnt = 0;
 
 void main() {
-	
+
 	char command[100];
 	const char exit[] = "exit ";
 	const char cols[] = "ls ";
@@ -33,17 +33,23 @@ void main() {
 
 		printf("%s :", pstrBuffer);
 		fgets(command, sizeof(command), stdin);
-		if (strncmp(command,exit,4)==0) break;
+		if (strncmp(command, exit, 4) == 0) break;
 		else if (strncmp(command, cols, 2) == 0) ls();
 		else if (strncmp(command, cocd, 2) == 0) {
-			if(strncmp(command, cocd, 3) == 0)	cd(command);
-			else printf("cd \"파일의 경로\"를 입력 해 주세요!\n");
+			if (strncmp(command, cocd, 3) == 0)	cd(command);
+			else printf("cd : cd is not command!!\n");
 		}
-		else if (strncmp(command, coall, 3) == 0) all();
+		else if (strncmp(command, coall, 3) == 0) {
+			all("C:\\");
+			printf("Wav File List!!!!\n\n\n");
+			for (int i = 0; i < wav_file_cnt; i++) {
+				puts(temp[i]);
+			}
+		}
 		else if (strncmp(command, cocls, 3) == 0) cls();
 	}
 
-	
+
 }
 void ls() {
 	long h_file;
@@ -67,7 +73,8 @@ void ls() {
 			}
 			else {
 				puts(file_search.name);
-			}	
+			}
+			
 		}
 
 	} while (_findnext(h_file, &file_search) == 0);
@@ -76,38 +83,102 @@ void ls() {
 void cd(char *command) {
 	char cut[] = " ";
 	char end[] = "";
-	
+	char new_command[100];
+	char cd_command[100];
 	char *command_cut = NULL;
-	if (strcmp(command, "cd") == 0) {
-		printf("cd \"파일의 경로\"를 입력 해 주세요!\n");
-		return;
-	}
+
+	strcpy(new_command, command);
+	new_command[strlen(new_command) - 1] = '\0';
 	command_cut = strtok(command, cut);
+
 	while (command_cut != NULL) {
 		command_cut = strtok(NULL, end);
 		if (command_cut != NULL) break;
 	}
 
 	pstrBuffer = getcwd(strBuffer, _MAX_PATH);
-	char cd_command[100];
 	strcpy(cd_command, pstrBuffer);
 	strcat(cd_command, "\\");
-	strcat(cd_command,command_cut);
-	
-	char chang[100];
+	strcat(cd_command, command_cut);
+
+	command_cut[strlen(command_cut) - 1] = '\0';
+
+
 	char *ch = replaceAll(cd_command, "\\", "\\\\");
 	strcpy(cd_command, ch);
 
-	cd_command[strlen(cd_command) - 1] = '\0';
-	
+
+
 	int error_check = chdir((char*)cd_command);
 	if (error_check == -1) {
-		printf("존재하지 않는 폴더 또는 파일입니다.\n");
+		printf("%s : %s is not a folder or .\n", new_command, command_cut);
 		return;
 	}
 }
-void all() {
+void all(char *path) {
+	long h_file;
+	FILE_SEARCH file_search;
+	char search_Path[512];
+	strcpy(search_Path, path);
 
+	char search_command[512];
+	strcpy(search_command, search_Path);
+	strcat(search_command, "*.*");
+	char temp_[512];
+	char old_Path[512];
+	strcpy(old_Path, search_Path);
+
+	char txt[] = "";
+	char *test = NULL;
+	int i = 0;
+
+ 	if ((h_file = _findfirst(search_command, &file_search)) == -1L) {
+		//printf("No files in current directory!\n");
+		return;
+	}
+	do {
+
+		if (strstr(file_search.name, txt)) {
+			if (strstr(file_search.name, ".wav")) {
+				strcpy(temp_, search_Path);
+				strcat(temp_, "\\");
+				strcat(temp_, file_search.name);
+				strcpy(temp[wav_file_cnt],temp_);
+				wav_file_cnt++;
+			}
+			if ((strcmp(file_search.name, ".") == 0) || (strcmp(file_search.name, "..") == 0)) {
+				continue;
+			}
+			else if (file_search.attrib == 16 ) {
+
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+				puts(file_search.name);
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+
+				int error_check = chdir(search_Path);
+				if (error_check == -1) {
+					printf("error\n");
+					return;
+				}
+
+				strcat(search_Path, file_search.name);
+				strcat(search_Path, "\\");
+				all(search_Path);
+ 				strcpy(search_Path, old_Path);
+			}
+			else {
+				puts(file_search.name);
+			}
+			
+		}
+
+	} while (_findnext(h_file, &file_search) == 0);
+	int error_check = chdir(pstrBuffer);
+	if (error_check == -1) {
+		printf("error\n");
+		return;
+	}
+	
 }
 void cls() {
 	system("cls");
@@ -142,9 +213,6 @@ char *replaceAll(char *s, const char *olds, const char *news) {
 		else *sr++ = *s++;
 	}
 	*sr = '\0';
-
+	result[strlen(result) - 1] = '\0';
 	return result;
-}
-int isFileOrDir(char* s) {
-	
 }
